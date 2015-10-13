@@ -44,13 +44,13 @@ as [btsh](https://github.com/bluetent/btsh) commands. But, here you go:
 	* For current user only:
 		* Edit `~/.bashrc`.
 		* Append at the bottom `. </path/to/btdocker/btdocker.plugin.zsh>`, obviously
-			making it point to the place where you cloned the project
+			making it point to the place where your cloned the project is.
 		* Restart you terminal
 
 	* For all users:
 		* Edit `/etc/bash.bashrc`
 		* Append at the bottom `. </path/to/btdocker/btdocker.plugin.zsh>`, obviously
-			making it point to the place where you cloned the project
+			making it point to the place where your cloned the project is.
 		* Restart you terminal
 
 
