@@ -98,7 +98,6 @@ function consume() {
 
       -t) # Store the template key:value passed
         set_option "t" "$2"
-        set_option "t" "es content"
         shift
         ;;
 

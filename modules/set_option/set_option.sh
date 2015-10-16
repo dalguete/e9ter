@@ -26,29 +26,19 @@ function set_option() {
 
   # Get the value to store
   local value="$2"
-echo ";;;; $value"
-echo "-ff--${#OPTION__t[@]}*ff**"
+
   # Store the options in its correct store
   local var="OPTION__$1"
-  local array="${var}[@]"
-  local o="${!array}"
-#    local array2="\"${var}[@]\""
-#    eval "${var}=(${!array} \"$value\")"
-  eval "${var}=($o \"$value\")"
-echo "---${#OPTION__t[@]}***"
-echo "---${OPTION__t[@]}***"
-  # Remove duplicate. Notice the latest entry will be preserved.
-  reverse_array $array 1> /dev/null;
-#    local arrayAux=(`cat $_BTDOCKER_LAST_RESULT`)
-echo "-aa--${#arrayAux[@]}**aa*"
-echo "-aa--${arrayAux[@]}**aa*"
+  eval "$var=(\"\${$var[@]}\" \"$value\")"
 
-  remove_duplicates_array arrayAux[@] 1> /dev/null;
-#    local arrayAux=(`cat $_BTDOCKER_LAST_RESULT`)
+  # Remove duplicate. When repeated, latest entry will be preserved.
+  # As function return array separated by \n, we prepare the same env
+  IFS=$'\n'
+  local arrayAux=($(reverse_array $var[@]));
+  arrayAux=($(remove_duplicates_array arrayAux[@]));
+  arrayAux=($(reverse_array arrayAux[@]));
 
-  reverse_array arrayAux[@] 1> /dev/null
-#    arrayAux=(`cat $_BTDOCKER_LAST_RESULT`)
-  eval "${var}=(${arrayAux[@]})"
-echo "-zz--${#OPTION__t[@]}**zz*"
-echo "-zz--${OPTION__t[@]}**zz*"
+  # Reset delimiter to normal value
+  unset IFS
+  eval "$var=(\"\${arrayAux[@]}\")"
 }
