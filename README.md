@@ -17,6 +17,13 @@ We'll need several Docker tools in order to achieve our goal, so the main ones a
 * Mac Users, please follow the directions set here https://docs.docker.com/installation/mac/
 on how to install them all. You'll need Virtualbox too.
 
+  You'll also need to update some packages to latest versions, to have a complete
+  experience. All can be done by using Homebrew. Next, what you'll need to install:
+	
+	* Bash >=4 OS X - Follow this guide http://johndjameson.com/blog/updating-your-shell-with-homebrew/ to enable it.
+	* Coreutils >=8 OS X - `brew install coreutils` to enable it.
+	* getopt >=1.1.6 OS X - `brew install gnu-getopt` to enable it.
+
 * Linux Users, you can find installtion steps info here https://docs.docker.com/installation/.
 Search for you distro/version and enjoy.
 
