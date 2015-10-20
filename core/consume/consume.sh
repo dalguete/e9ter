@@ -36,8 +36,8 @@ function consume() {
   esac
 
   # Consume options
-  local args=`getopt -o t: -q -- "$@"`
-  # Note the quotes around $args: they are essential!
+  local args=`getopt -o n:s:t: -q -- "$@"`
+  # Note the quotes around $@, they are essential!
   eval set -- "$args"
 
   # Process all input data
@@ -91,13 +91,24 @@ function consume() {
 #        -t) # Indicates it should process the trackedhooks/ folder.
 #          _set_flag 'from-trackedhooks-folder' 1
 #          ;;
-#
-#        -y) # Indicates any question to user will be answered yes, no asking.
-#          _set_flag 'yes' 1
-#          ;;
+
+      -n) # Indicates the recipe version to use.
+        set_option "n" "$2"
+        shift
+        ;;
+
+      -s) # Indicates the recipes source of info.
+        set_option "s" "$2"
+        shift
+        ;;
 
       -t) # Store the template key:value passed
         set_option "t" "$2"
+        shift
+        ;;
+
+      -o) # General use option, used to store custom module data required
+        set_option "o" "$2"
         shift
         ;;
 

@@ -7,11 +7,22 @@
 # USAGE OPTIONS
 # -------------
 #
-#  clone-recipe <recipe-name>
+#  clone-recipe <recipe-name> [-n <version>] [-s <source>] [<destination>]
 #     Clone a given recipe.
+#     A specific version can be defined, if not, the default one as set in recipe
+#     repository will be used.
+#     Set a different repository as recipe source. By default '$E9TER_MAIN_RECIPES_REPO'
+#     will be used.
+#     Destination can be defined, if not, current working directory will be used
 #
-#  init-recipe <recipe-name> [-t <template-var-key>:<value>]*
-#     Init template vars found in a cloned recipe, using given vars
+#  init-recipe <recipe-name> [-n <version>]  [-s <source>] [-t <template-var-key>:<value>]* [<destination>]
+#     Init a given recipe.
+#     A specific version can be defined, if not, the default one as set in recipe
+#     repository will be used.
+#     Set a different repository as recipe source. By default '$E9TER_MAIN_RECIPES_REPO'
+#     will be used.
+#     Template var definitions in recipe will be replaced with data passed
+#     Destination can be defined, if not, current working directory will be used
 #
 
 
@@ -31,7 +42,7 @@ btdocker() {
   # Without this, any inner main function call would override variables set in parent
   # call, possible producing undesirable results.
   (
-
+  
   # Functionality is defined in so called, modules. There live some functions
   # that will perform specific tasks. Use that approach to add functionality, do
   # not add it here directly.
@@ -64,12 +75,23 @@ btdocker() {
   if [ ! -d "$DIR" ]; then 
     DIR="$PWD"
   fi
-  # Load modules
+  # Load core modules
+  for i in $DIR/core/*/*.sh; do
+    if [ -r $i ]; then
+      . $i
+    fi
+  done
+  # Load additional modules
   for i in $DIR/modules/*/*.sh; do
     if [ -r $i ]; then
       . $i
     fi
   done
+
+  # Checks the main recipes folder is set and has a value. Nothing will work without it.
+  if [ -z "$E9TER_MAIN_RECIPES_REPO" ]; then
+    die "No main recipes folder found"
+  fi
 
   # Arguments passed are consumed, and operation called, if any found
   consume "$@"

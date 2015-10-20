@@ -3,21 +3,7 @@
 # Functionality for the set_option function
 #
 
-# Options data is handled in per option array. To make this compatible with old
-# bash version that do not work with assoc arrays.
-# Use the format below as an example to store your options:
-#
-#   OPTION__<option key>=()
-#
-# Where <option key> will be the option letter
-#
-# But for now, we have to remove all variable definitions, just to have a complete
-# and good experience
-for entry in ${!OPTION__*}; do
-  unset $entry
-done  
-
-# Function used to store the interpretation of an option obtained
+# Used to store a value in the correct options store, using the given option key
 function set_option() {
   # Check a key and a value are received
   if [ $# != 2 ]; then

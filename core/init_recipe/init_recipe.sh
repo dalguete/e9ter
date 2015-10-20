@@ -13,9 +13,32 @@
 #######
 function init_recipe() {
   # Performs a clone
-  { btdocker clone-recipe "${ARGS[@]}" 1> /dev/null; } || exit $?
-echo "${OPTION__t[@]}"
-echo "${#OPTION__t[@]}"
+  local folder=$(btdocker clone-recipe "${ARGS[@]}")
+  if [ -z "$folder" ]; then
+    exit 1
+  fi
+
+  # Prepare the delimiter
+  IFS=$'\n';
+
+  # Get all the stored options
+  local options=($(get_options "t"))
+
+  # Loop through every .TEMPLATE file, as those are our targets
+  for file in $(find "$folder" -name '*.TEMPLATE'); do 
+    # Replace all template vars
+    for opt in ${options[@]}; do
+      status "...$opt***"
+    done
+
+    # Remove .TEMPLATE extension from file
+    mv $file ${file%.TEMPLATE}
+  done
+
+  # Reset delimiter
+  unset IFS
+
+#  { btdocker clone-recipe "${ARGS[@]}" 1> /dev/null; } || exit $?
 #    # Error checks performed, based on collected data by _consume
 #    if [ ${#ARGS[@]} != 1 ]; then
 #      die "Expected recipe name (only one)"
