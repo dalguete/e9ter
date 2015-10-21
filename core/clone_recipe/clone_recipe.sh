@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Functionality for the clone_recipe function
 #
@@ -16,6 +16,9 @@
 #     Set a different repository as recipe source. By default '$E9TER_MAIN_RECIPES_REPO'
 #     will be used.
 #     Destination can be defined, if not, current working directory will be used
+# 
+# Return:
+#   Prints the names of files and folders cloned
 function clone_recipe() {
   # Error checks performed
   if [ -z "${ARGS[*]}" ]; then
@@ -115,7 +118,7 @@ function clone_recipe() {
 
       # Performs a clone in the component found
       local c_temp=$(crossos mktemp -d)
-      btdocker clone-recipe "${!c_recipe}" -n "${!c_version}" -s "${!c_source}" "$c_temp"
+      btdocker clone-recipe "${!c_recipe}" -n "${!c_version}" -s "${!c_source}" "$c_temp" > /dev/null
 
       # In case the destination folder is empty, we can say there was an error
       if [ -z "$(ls -A $c_temp)" ]; then
@@ -284,9 +287,13 @@ function clone_recipe() {
     done
   fi
 
-  # Move the cloned folder to the current directory
+  # Move every entry in the recipe, to its final location
   shopt -s dotglob
-  mv "$temp/$recipe/$version/$folder/"* "$destination"
+
+  for item in "$temp/$recipe/$version/$folder/"*; do
+    mv "$item" "$destination"
+    echo "$destination/$(basename $item)"
+  done  
 
   # Remove temp folder
   rm -rf "$temp" &> /dev/null

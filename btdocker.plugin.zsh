@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # A bunch of utilities used to deal with Docker integrations and template conversion,
 # in order the get all images and containers in place; all encapsulated in a single
