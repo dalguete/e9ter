@@ -4,26 +4,6 @@
 # in order the get all images and containers in place; all encapsulated in a single
 # command, 'btdocker'.
 #
-# USAGE OPTIONS
-# -------------
-#
-#  clone-recipe <recipe-name> [-n <version>] [-s <source>] [<destination>]
-#     Clone a given recipe.
-#     A specific version can be defined, if not, the default one as set in recipe
-#     repository will be used.
-#     Set a different repository as recipe source. By default '$E9TER_MAIN_RECIPES_REPO'
-#     will be used.
-#     Destination can be defined, if not, current working directory will be used
-#
-#  init-recipe <recipe-name> [-n <version>]  [-s <source>] [-t <template-var-key>:<value>]* [<destination>]
-#     Init a given recipe.
-#     A specific version can be defined, if not, the default one as set in recipe
-#     repository will be used.
-#     Set a different repository as recipe source. By default '$E9TER_MAIN_RECIPES_REPO'
-#     will be used.
-#     Template var definitions in recipe will be replaced with data passed
-#     Destination can be defined, if not, current working directory will be used
-#
 
 
 # Main operative function where all the magic happens

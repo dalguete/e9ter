@@ -3,15 +3,19 @@
 # Functionality for the clone_recipe function
 #
 
-# Function used to clone a defined recipe from source.
+# Function used to clone a defined recipe from source, into current or specified folder
+#
+# Operation:
+#   clone-recipe 
 #
 # Arguments:
-#   recipe. Name of the recipe to extract info from
-#   version (optional). Recipe version to use
-#
-# Returns:
-#  folder path of cloned recipe or nothing if not found. The recipe will be
-#  cloned in the current folder
+#  <recipe-name> [-n <version>] [-s <source>] [<destination>]
+#     Clone a given recipe.
+#     A specific version can be defined, if not, the default one as set in recipe
+#     repository will be used.
+#     Set a different repository as recipe source. By default '$E9TER_MAIN_RECIPES_REPO'
+#     will be used.
+#     Destination can be defined, if not, current working directory will be used
 function clone_recipe() {
   # Error checks performed
   if [ -z "${ARGS[*]}" ]; then
@@ -42,7 +46,7 @@ function clone_recipe() {
   status "Getting '$recipe' recipe..."
 
   # Get the last version available
-  local temp=$(mktemp -d)
+  local temp=$(crossos mktemp -d)
   pushd $temp &> /dev/null
   git init -q
   git remote add -f origin "$source" &> /dev/null
@@ -69,7 +73,7 @@ function clone_recipe() {
   #
   # Idea took from http://stackoverflow.com/a/13738951
   #
-  temp=$(mktemp -d)
+  temp=$(crossos mktemp -d)
   pushd $temp &> /dev/null
   git init -q
   git remote add -f origin "$source" &> /dev/null
@@ -110,7 +114,7 @@ function clone_recipe() {
       fi
 
       # Performs a clone in the component found
-      local c_temp=$(mktemp -d)
+      local c_temp=$(crossos mktemp -d)
       btdocker clone-recipe "${!c_recipe}" -n "${!c_version}" -s "${!c_source}" "$c_temp"
 
       # In case the destination folder is empty, we can say there was an error
@@ -182,7 +186,7 @@ function clone_recipe() {
 
       # Loop through all pivot matches and define temporary work places to build
       # the component recipe.
-      local work_list=$(mktemp)
+      local work_list=$(crossos mktemp)
 
       for pattern in ${patterns[@]}; do
         for pivot in $(find "$temp/$recipe/$version/$folder/" -name "$(printf "%q" "[COMPONENT:${pattern^^}]")"); do
@@ -193,7 +197,7 @@ function clone_recipe() {
           echo "$pivot" >> $work_list
 
           # Copy the current component recipe to a new place, so it can be built in isolation
-          local build_place=$(mktemp -u)
+          local build_place=$(crossos mktemp -u)
           rm -rf "$build_place" &> /dev/null
           \cp -a "$c_temp" "$build_place"
 

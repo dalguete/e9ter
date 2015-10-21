@@ -3,15 +3,24 @@
 # Functionality for the init_recipe function
 #
 
-# Function used to init a clone recipe.
+# Function used to init a cloned recipe from source, into current or specified folder
+#
+# Operation:
+#   init-recipe 
 #
 # Arguments:
-#   recipe. Name of the recipe to extract info from
-#
-# Returns:
-#  nothing on success or a list of non initialized template vars found
-#######
+#  <recipe-name> [-n <version>] [-s <source>] [-t <template-var-key>:<value>]* [<destination>]
+#     Init a given recipe.
+#     A specific version can be defined, if not, the default one as set in recipe
+#     repository will be used.
+#     Set a different repository as recipe source. By default '$E9TER_MAIN_RECIPES_REPO'
+#     will be used.
+#     Template var definitions in recipe will be replaced with data passed
+#     Destination can be defined, if not, current working directory will be used
 function init_recipe() {
+  btdocker clone-recipe "${ARGS[0]}"
+
+
   # Performs a clone
   local folder=$(btdocker clone-recipe "${ARGS[@]}")
   if [ -z "$folder" ]; then
@@ -37,43 +46,4 @@ function init_recipe() {
 
   # Reset delimiter
   unset IFS
-
-#  { btdocker clone-recipe "${ARGS[@]}" 1> /dev/null; } || exit $?
-#    # Error checks performed, based on collected data by _consume
-#    if [ ${#ARGS[@]} != 1 ]; then
-#      die "Expected recipe name (only one)"
-#    fi
-#
-#    # Get the recipe name
-#    local recipe=${ARGS[0]}
-#
-#    # Helper used to print directly to /dev/tty
-#    exec 3> /dev/tty
-#
-#    # Status message
-#    #
-#    # Prevent messing with required output
-#    # http://stackoverflow.com/a/9405235
-#    echo "Getting recipe..." >&3
-#
-#    # Clone recipe folder from repo.
-#    #
-#    # Idea took from http://stackoverflow.com/a/13738951
-#    #
-#    local temp=$(mktemp -d)
-#    pushd $temp &> /dev/null
-#    git init -q
-#    git remote add -f origin git@github.com:bluetent/btdocker-templates.git &> /dev/null
-#    git config core.sparsecheckout true
-#    echo "$recipe" >> .git/info/sparse-checkout
-#    git pull -q origin master &> /dev/null
-#    popd &> /dev/null
-#
-#    # Recipe not found, report it
-#    if [ ! -d "$temp/$recipe" ]; then
-#      die "Recipe '$recipe' name not found"
-#    fi
-#
-#    # Return the folder path found
-#    echo "$temp/$recipe"
 }
