@@ -7,6 +7,9 @@
 
 function die {
   # Just prints to stderr
-  echo "$@" 1>&2
+  if [ "$@" ]; then
+    echo "$@" 1>&2
+  fi
+
   exit 1
 }
