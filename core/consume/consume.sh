@@ -36,7 +36,7 @@ function consume() {
   esac
 
   # Consume options
-  local args=`getopt -o n:s:t: -q -- "$@"`
+  local args=`crossos getopt -o n:s:t: -q -- "$@"`
   # Note the quotes around $@, they are essential!
   eval set -- "$args"
 
