@@ -60,6 +60,45 @@ as [btsh](https://github.com/bluetent/btsh) commands. But, here you go:
 			making it point to the place where your cloned the project is.
 		* Restart you terminal
 
+About Entries In 'recipe.sh'
+----------------------------
+
+To better understand the entry types that file handles, next a brief explanation
+is displayed, so you can have a better on how to proceed when defining data into it:
+
+	* **Folder**: Defines where to search for the actual recipe data from. If nothing
+		defined **recipe** is used as name.
+		Receives a single value.
+		Used in **clone** process.
+
+	* **Template**: Defines a series of entries used to identify template vars to be
+		used inside the .TEMPLATE files. This is not a recopilation of all available
+		vars, but a list of default values, so when initializing the recipe, the user
+		won't have to explicitely pass values for them.
+		Receives a multiple value.
+		Used in **init** process.
+
+	* **Component**: Defines a series of entries used to identify the different components
+		of a recipe, when it is a compound one. Basic information to use are:
+
+		* Name: Name of the component recipe to use. ID option. Only required entry.
+		* Version: Version of the component recipe to use. Used to further identificate
+			the correct recipe. If not set, internal processes will use the last available
+			recipe. ID option.
+		* Source: From where to get the mentioned recipe. Defaults to global recipes location.
+		* Status: Tells if the component should be "normally installed", "removed" or "replaced".
+			Useful when extending/altering a compound recipe.
+		* ICO: Set of entries aimed to alter a given component definition. With it you
+			can change Non-ID options of those components.
+
+		Receives a multiple value.
+		Used in **clone** process.
+
+New Operations
+--------------
+
+When defining a new operation, you should be aware that even when using other operations
+internally (see clone vs init) all the checkings should live inside of each of them.
 
 Commands used to deal with Docker integrations
 ----------------------------------------------

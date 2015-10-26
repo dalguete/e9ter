@@ -2,6 +2,46 @@
 #
 # Functionality for the clone_recipe function
 #
+# Operation must be registerd with "set_operation"
+# Internal process requires some functions to be defined, as explained next
+# 
+#   <OPERATION>_usage
+#     Used when usage message should be displayed for the operation defined.
+# 
+#   <OPERATION>_consume
+#     Used when the operation options should be consumed.
+# 
+# Be sure to implement them.
+# 
+
+set_operation "clone-recipe" "v:s:" "version:,source:"
+
+# Function used to display operation usage
+function clone_recipe_usage() {
+  die "TODO: Clone recipe usage"
+}
+
+# Function used to consume operation passed options
+function clone_recipe_consume() {
+  # Process all input data. Only valid entries will live here. Non valid ones are
+  # filtered in the main consume process
+  while [ $# -gt 0 ]
+  do
+    case "$1" in
+      -v|--version) # Indicates the recipe version to use.
+        set_option "version" "$2"
+        shift
+        ;;
+
+      -s|--source) # Indicates the recipes source of info.
+        set_option "source" "$2"
+        shift
+        ;;
+    esac
+
+    shift
+  done
+}
 
 # Function used to clone a defined recipe from source, into current or specified folder
 #
@@ -9,7 +49,7 @@
 #   clone-recipe 
 #
 # Arguments:
-#  <recipe-name> [-n <version>] [-s <source>] [<destination>]
+#  <recipe-name> [-v|--version <version>] [-s|--source <source>] [<destination>]
 #     Clone a given recipe.
 #     A specific version can be defined, if not, the default one as set in recipe
 #     repository will be used.
@@ -29,18 +69,11 @@ function clone_recipe() {
   local recipe=${ARGS[0]}
 
   # Get the version to work with
-  local version=
-  local versions=($(get_options "n"))
-  if [ "${versions[*]}" ]; then
-    version=${versions[${#versions[@]}-1]}
-  fi
+  local version=($(get_last_option "version"))
 
   # Get the source to work with
-  local source="$E9TER_MAIN_RECIPES_REPO"
-  local sources=($(get_options "s"))
-  if [ "${sources[*]}" ]; then
-    sources=${sources[${#sources[@]}-1]}
-  fi
+  local src=($(get_last_option "source"))
+  src=${src:-"$E9TER_MAIN_RECIPES_REPO"}
 
   # Get destination
   local destination=${ARGS[1]:-"."}
@@ -52,7 +85,7 @@ function clone_recipe() {
   local temp=$(crossos mktemp -d)
   pushd $temp &> /dev/null
   git init -q
-  git remote add -f origin "$source" &> /dev/null
+  git remote add -f origin "$src" &> /dev/null
   git config core.sparsecheckout true
   echo "$recipe/version" >> .git/info/sparse-checkout
   git pull -q origin master &> /dev/null
@@ -79,7 +112,7 @@ function clone_recipe() {
   temp=$(crossos mktemp -d)
   pushd $temp &> /dev/null
   git init -q
-  git remote add -f origin "$source" &> /dev/null
+  git remote add -f origin "$src" &> /dev/null
   git config core.sparsecheckout true
   echo "$recipe/$version" >> .git/info/sparse-checkout
   git pull -q origin master &> /dev/null
@@ -109,7 +142,7 @@ function clone_recipe() {
       local c_recipe="RECIPE__COMPONENT_${i}_NAME"
       local c_version="RECIPE__COMPONENT_${i}_VERSION"
       local c_position=$i
-      local c_source="RECIPE__COMPONENT_${i}_SOURCE"
+      local c_src="RECIPE__COMPONENT_${i}_SOURCE"
       
       # Empty recipe or not defined, break
       if [ -z "${!c_recipe}" ]; then
@@ -118,7 +151,7 @@ function clone_recipe() {
 
       # Performs a clone in the component found
       local c_temp=$(crossos mktemp -d)
-      btdocker clone-recipe "${!c_recipe}" -n "${!c_version}" -s "${!c_source}" "$c_temp" > /dev/null
+      btdocker clone-recipe "${!c_recipe}" -v "${!c_version}" -s "${!c_src}" "$c_temp" > /dev/null
 
       # In case the destination folder is empty, we can say there was an error
       if [ -z "$(ls -A $c_temp)" ]; then
@@ -292,8 +325,8 @@ function clone_recipe() {
 
   for item in "$temp/$recipe/$version/$folder/"*; do
     mv "$item" "$destination"
-    echo "$destination/$(basename $item)"
-  done  
+    echo "$destination/$(basename "$item")"
+  done
 
   # Remove temp folder
   rm -rf "$temp" &> /dev/null

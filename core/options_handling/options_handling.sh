@@ -18,13 +18,6 @@ done
 
 # Functionality live in other files. Set that way for convenience, and to keep this file
 # as short an clean as possible
-DIR="${BASH_SOURCE%/*}"
-if [ ! -d "$DIR" ]; then 
-  DIR="$PWD"
-fi
 # Load components
-for i in $DIR/components/*.sh; do
-  if [ -r $i ]; then
-    . $i
-  fi
-done
+_load "${BASH_SOURCE%/*}/components/*.sh"
+

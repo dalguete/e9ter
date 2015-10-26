@@ -10,114 +10,69 @@ ARGS=()
 # Function used to consume the different operations and operations passed
 function consume() {
   # Check values passed to main function
-  if [ ! $# ]; then
-    die "No args passed"
-  fi
   if [ -z "$1" ]; then
     die "No operation defined"
   fi
 
   # Set the main operation to use.
-  OPERATION=$1
+  OPERATION=$(get_operation_data "$1")
+  if [ -z "$OPERATION" ]; then
+    die
+  fi
+
+  # Get operation handling info
+  local _short=$(get_operation_data "$1" "short options")
+  local _long=$(get_operation_data "$1" "long options")
+  local _usage=$(get_operation_data "$1" "usage")
+  local _consume=$(get_operation_data "$1" "consume")
+
+  # Operation argument is no longer needed
   shift
 
-  # Check the operation is a valid one, and assoc it valid function name to call
-  case "$OPERATION" in
-    clone-recipe)
-      OPERATION="clone_recipe"
-      ;;
+  # Consume options. getopt transformation is called twice, first for error checkings
+  # and second for actual processing
+  crossos getopt -o $_short -l $_long -q -- "$@" &> /dev/null
+  if [ $? -ne 0 ]; then
+    $_usage
+  fi
 
-    init-recipe)
-      OPERATION="init_recipe"
-      ;;
+  local args=$(crossos getopt -o $_short -l $_long -q -- "$@")
 
-    *)
-      die "Operation not recognized"
-  esac
-
-  # Consume options
-  local args=`crossos getopt -o n:s:t: -q -- "$@"`
-  # Note the quotes around $@, they are essential!
+  # Important to exec the eval here, as a loop latter is using positional parameters
+  # to consume arguments (see below)
   eval set -- "$args"
 
-  # Process all input data
+  # Before consuming, ensure all arguments passed, when using spaces, can be treated
+  # as a whole thing.
+  # http://stackoverflow.com/a/1669493
+  local fixed_args=()
+  local whitespace="[[:space:]]"
+
+  for arg in "$@"; do
+    if [[ $arg =~ $whitespace ]]; then
+      # Single quotes are used instead of double ones, to prevent incorrect variable expansion
+      arg=\'$arg\'
+#      arg=\'$(echo "$arg" | sed "s/'/\\\'/g")\'
+    fi
+    fixed_args=("${fixed_args[@]}" "$arg")
+  done
+
+  # Consume options in operation
+  $_consume "${fixed_args[@]}"
+
+  # Process arguments only
+  local start_consuming=0
+
   while [ $# -gt 0 ]
   do
     case "$1" in
-#        -h|--help) # General help.
-#          _set_main_function "help"
-#          ;;
-#
-#        -s|--status) # Display the status.
-#          _set_main_function "status"
-#          ;;
-#
-#        --init) # Initializes the githooks space.
-#          _set_main_function "init"
-#          ;;
-#
-#        --destroy) # Restores the git hooks space to its natural form.
-#          _set_main_function "destroy"
-#          ;;
-#
-#        -1|--on) # Activate a given hook.
-#          _set_main_function "activate"
-#          ;;
-#
-#        -0|--off) # Deactivate a given hook.
-#          _set_main_function "deactivate"
-#          ;;
-#
-#        -a|--add) # Add a new hook file entry.
-#          _set_main_function "add"
-#          ;;
-#
-#        --do-edit) # Open the favorite editor after creating the hook file entry.
-#          _set_flag 'do-edit' 1
-#          ;;
-#
-#        --do-add) # Create the script file if doens't exist, on edit.
-#          _set_flag 'do-add' 1
-#          ;;
-#
-#        -e|--edit) # Edit hook file entry.
-#          _set_main_function "edit"
-#          ;;
-#
-#        -d|--delete) # Delete hook file entry.
-#          _set_main_function "delete"
-#          ;;
-#
-#        -t) # Indicates it should process the trackedhooks/ folder.
-#          _set_flag 'from-trackedhooks-folder' 1
-#          ;;
-
-      -n) # Indicates the recipe version to use.
-        set_option "n" "$2"
-        shift
-        ;;
-
-      -s) # Indicates the recipes source of info.
-        set_option "s" "$2"
-        shift
-        ;;
-
-      -t) # Store the template key:value passed
-        set_option "t" "$2"
-        shift
-        ;;
-
-      -o) # General use option, used to store custom module data required
-        set_option "o" "$2"
-        shift
-        ;;
-
-      --) # This is not considered.
+      --) # This is just used as an indicator of arguments section 'is coming'
+        start_consuming=1
         ;;
 
       *) # Anything trapped here is considered an argument.
-        if [ -z "$1" ]; then
-          # Empty data is discarded.
+        if [[ $start_consuming = 0 || -z "$1" ]]; then
+          # Not started consumption or no data, means discard.
           shift
           continue;
         fi
@@ -130,7 +85,7 @@ function consume() {
   done
 
   # Call the operation function
-  if [ -n "$OPERATION" ]; then
+  if [ "$OPERATION" ]; then
     $OPERATION
   fi
 }

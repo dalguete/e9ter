@@ -51,26 +51,24 @@ btdocker() {
 
   # Functionality live in other files. Set that way for convenience, and to keep this file
   # as short an clean as possible
-  DIR="${BASH_SOURCE%/*}"
-  if [ ! -d "$DIR" ]; then 
-    DIR="$PWD"
-  fi
-  # Load core modules
-  for i in $DIR/core/*/*.sh; do
-    if [ -r $i ]; then
-      . $i
-    fi
-  done
-  # Load additional modules
-  for i in $DIR/modules/*/*.sh; do
-    if [ -r $i ]; then
-      . $i
-    fi
-  done
+  function _load() {
+    for i in $(find `echo "$1"`); do
+      if [ -r "$i" ]; then
+        . "$i"
+      fi
+    done
+  }
+
+  # Load core modules (basic functionality)
+  _load "${BASH_SOURCE%/*}/core/*/*.sh"
+  # Load main modules (basic functionality)
+  _load "${BASH_SOURCE%/*}/modules/*/*.sh"
+  # TODO: Load other modules (extended functionality), third party
+  # _load "<path/to/more/scripts>"
 
   # Checks the main recipes folder is set and has a value. Nothing will work without it.
   if [ -z "$E9TER_MAIN_RECIPES_REPO" ]; then
-    die "No main recipes folder found"
+    die "No main recipes repo defined"
   fi
 
   # Arguments passed are consumed, and operation called, if any found

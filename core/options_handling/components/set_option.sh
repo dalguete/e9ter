@@ -10,11 +10,12 @@ function set_option() {
     return
   fi
 
-  # Get the value to store
+  # Get the items passed
+  local key=$(echo "$1" | tr '-' '_')
   local value="$2"
 
   # Store the options in its correct store
-  local var="OPTION__$1"
+  local var="OPTION__$key"
   eval "$var=(\"\${$var[@]}\" \"$value\")"
 
   # Remove duplicate. When repeated, latest entry will be preserved.
