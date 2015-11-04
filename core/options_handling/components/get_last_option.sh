@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-#
 # Functionality for the get_last_option function
 #
 

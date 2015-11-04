@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-#
 # Functionality for the is_option function
 #
 

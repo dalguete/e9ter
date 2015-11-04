@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-#
 # Functionality for the die function
 #
 # Used to print a message to stderr and return an error value.

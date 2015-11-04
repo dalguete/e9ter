@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-#
 # Functionality for the cross_os function
 #
 # Used to allow the execution of alternative commands, based on checking in the

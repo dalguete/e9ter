@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-#
 # Functionality for the get_operation_data function
 #
 # Arguments:
@@ -32,22 +30,22 @@ function get_operation_data() {
   case "$2" in
     "short options")
       options=($(get_options "operation_${operation}_short_options"))
-      echo "${options[-1]}"
+      [[ ${#options[@]} != 0 ]] && echo "${options[-1]}"
       ;;
 
     "long options")
       options=($(get_options "operation_${operation}_long_options"))
-      echo "${options[-1]}"
+      [[ ${#options[@]} != 0 ]] && echo "${options[-1]}"
       ;;
 
     "usage")
       options=($(get_options "operation_${operation}_usage"))
-      echo "${options[-1]}"
+      [[ ${#options[@]} != 0 ]] && echo "${options[-1]}"
       ;;
 
     "consume")
       options=($(get_options "operation_${operation}_consume"))
-      echo "${options[-1]}"
+      [[ ${#options[@]} != 0 ]] && echo "${options[-1]}"
       ;;
 
     *) # Operation Name

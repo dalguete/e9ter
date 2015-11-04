@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-#
 # Functionality to work with option handling
 #
 
