@@ -19,6 +19,7 @@ Requirements
 
 * Linux Users, enjoy!.
 
+In any case, **GIT** (>=1.7) is required, the latest version, the better... for you :)
 
 Recipes
 =============
