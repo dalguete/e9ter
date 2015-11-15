@@ -99,7 +99,7 @@ Files/Folders to be treated
 In general, recipe content will be treated (a.k.a. variables replaced) only when
 a file or folder will explicitely say so. Otherwise, it will be left as is. This
 is important to discern about files and folders meant to be used with no changes
-vs the ones suitable to changes based on user input settings (like a project name)
+vs the ones suitable to changes based on user input settings (like a project name).
 
 So, to have replacements perform, note the next:
 
@@ -108,10 +108,10 @@ So, to have replacements perform, note the next:
     as **[TEMPLATE:\*]**, will be replaced.
 
   * **For Files and Folder**: Any entry named as **[TEMPLATE:\*]** will be replaced.
-    This give the change of having files and folders suitable to be replaced using
+    This gives the change of having files and folders suitable to be replaced using
     user input.
 
-It's completely valid to have a file named like **[TEMPLATE:\<var name\>.TEMPLATE**,
+It's completely valid to have a file named like **[TEMPLATE:\<var name\>].TEMPLATE**,
 where \<var name\> is the name of a var.
 
 
