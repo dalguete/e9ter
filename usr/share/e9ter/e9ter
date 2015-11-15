@@ -1,16 +1,21 @@
 #!/usr/bin/env bash
 #
-# A bunch of utilities used to deal with Docker integrations and template conversion,
-# in order the get all images and containers in place; all encapsulated in a single
-# command, 'btdocker'.
+# This is the "Environment Maker". 
 #
-
+# Helper used to create a project environment (files and folders), with anything
+# required for it to work. Those environment are called recipes, and are info pulled
+# from a given place.
+#
+# Actually whatever is set there is what will define how the environment will look
+# look like. Thisi utility is simply on charge of getting it and set it up based
+# on any info set there.
+#
 
 # Main operative function where all the magic happens
 # This uses a bunch of other functions defined internally, as everything works under
 # a subshell (give the code a look) so there's no risk of accidentally expose a
 # utility function other than the main one.
-btdocker() {
+e9ter() {
   ###################################
   # Start almost unnoticed subshell #
   ###################################
@@ -60,11 +65,16 @@ btdocker() {
   }
 
   # Load core modules (basic functionality)
-  _load "${BASH_SOURCE%/*}/core/*/*.sh"
+  _load "/usr/share/e9ter/core/*/*.sh"
   # Load main modules (basic functionality)
-  _load "${BASH_SOURCE%/*}/modules/*/*.sh"
+  _load "/usr/share/e9ter/modules/*/*.sh"
   # TODO: Load other modules (extended functionality), third party
   # _load "<path/to/more/scripts>"
+
+  # Load default settings file
+  if [ -f /etc/default/e9ter ]; then
+    . /etc/default/e9ter
+  fi
 
   # Checks the main recipes folder is set and has a value. Nothing will work without it.
   if [ -z "$E9TER_MAIN_RECIPES_REPO" ]; then
@@ -79,3 +89,6 @@ btdocker() {
   ##########################################
   )
 }
+
+# Call the main function with all params passed
+e9ter "$@"
