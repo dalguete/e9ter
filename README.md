@@ -113,18 +113,18 @@ data into it:
   * **Component**: Defines a series of entries used to identify the different components
 		of a recipe, when it is a compound one. Basic information to use are:
 
-		* Name: Name of the component recipe to use. ID option. Only required entry.
-		* Version: Version of the component recipe to use. Used to further identificate
-			the correct recipe. If not set, internal processes will use the last available
-			recipe. ID option.
-		* Source: From where to get the mentioned recipe. Defaults to global recipes location.
-		* Status: Tells if the component should be "normally installed", "removed" or "replaced".
-			Useful when extending/altering a compound recipe.
-		* ICO: Set of entries aimed to alter a given component definition. With it you
-			can change Non-ID options of those components.
+    * Name: Name of the component recipe to use. ID option. Only required entry.
+    * Version: Version of the component recipe to use. Used to further identificate
+      the correct recipe. If not set, internal processes will use the last available
+      recipe. ID option.
+    * Source: From where to get the mentioned recipe. Defaults to global recipes location.
+    * Status: Tells if the component should be "normally installed", "removed" or "replaced".
+      Useful when extending/altering a compound recipe.
+    * ICO: Set of entries aimed to alter a given component definition. With it you
+      can change Non-ID options of those components.
 
-		Receives a multiple value.
-		Used in **clone** process.
+      Receives a multiple value.
+      Used in **clone** process.
 
 
 New Operations
