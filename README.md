@@ -36,11 +36,11 @@ Recipe Format
 
 Every recipe requires to be represented in a structure that holds the name of the
 recipe itself, inside with folders named after the version it holds, and finally,
-internally the 'recipe.sh' file with all recipe variables, as required.
+internally the 'recipe.yaml' file with all recipe variables, as required.
 
-By default, you'll use a recipe folder, living next to recipe.sh, where all your
+By default, you'll use a recipe folder, living next to recipe.yaml, where all your
 recipe definitions will live. You can use a different folder by setting the **Folder**
-var inside recipe.sh.
+var inside recipe.yaml.
 
 Despite the fact recipe folder can have anything you want, disposed in any way, we
 recommend you create inside of it, other folder, named after your recipe's name,
@@ -59,7 +59,7 @@ In general, the recipe structure should be something like:
  │
  ├── version
  ├── <version folder>/
- │    ├── recipe.sh
+ │    ├── recipe.yaml
  │    └── recipe/
  │        └── <actual recipe contents>
  │
@@ -80,13 +80,13 @@ Having the entries as follows:
   * **\<version folder\>/**: Folder named after the version holded here. At least
     one of them should exist, that must match the value given in **version** file.
 
-  * **recipe.sh**: Recipe configuration file, that holds basic information about
+  * **recipe.yaml**: Recipe configuration file, that holds basic information about
     the recipe, like location, replacement variables, inner recipes or components,
     etc.
 
   * **recipe/**: Folder where the actual recipe contents will live. If not overriden
-    in recipe.sh file, this is the default place **e9ter** will look for. If other name
-    defined in recipe.sh, that folder will be used as the place to check.
+    in recipe.yaml file, this is the default place **e9ter** will look for. If other name
+    defined in recipe.yaml, that folder will be used as the place to check.
 
   * **\<actual recipe contents\>**: As the name implies, these are the real recipe
     contents. This can be anything you want, but the recommendation is to make this
@@ -116,8 +116,8 @@ It's completely valid to have a file named like **[TEMPLATE:\<var name\>].TEMPLA
 where \<var name\> is the name of a var.
 
 
-About Entries In 'recipe.sh'
-----------------------------
+About Entries In 'recipe.yaml'
+------------------------------
 
 To better understand the entry types that file handles, next a brief explanation
 is displayed, so you can have a better understanding on how to proceed when defining
