@@ -6,6 +6,7 @@ required for it to be usable. They are served in what has been called, **recipes
 
 So, let's start the fun.
 
+
 Requirements
 ------------
 
@@ -27,6 +28,7 @@ aimed to serve a purpose. They can have variables defined, which will be replace
 the moment of processing a given recipe.
 
 Also, a recipe can be composed of other ones, and on and on and on.
+
 
 Recipe Format
 -------------
@@ -91,6 +93,28 @@ Having the entries as follows:
     as a helper for possible compound recipes that could be using this one.
 
 
+Files/Folders to be treated
+---------------------------
+
+In general, recipe content will be treated (a.k.a. variables replaced) only when
+a file or folder will explicitely say so. Otherwise, it will be left as is. This
+is important to discern about files and folders meant to be used with no changes
+vs the ones suitable to changes based on user input settings (like a project name)
+
+So, to have replacements perform, note the next:
+
+  * **For Files**: Only files ending with **.TEMPLATE** extension will be treated
+    for variable replacement, and only content inside of if, with variables named
+    as **[TEMPLATE:\*]**, will be replaced.
+
+  * **For Files and Folder**: Any entry named as **[TEMPLATE:\*]** will be replaced.
+    This give the change of having files and folders suitable to be replaced using
+    user input.
+
+It's completely valid to have a file named like **[TEMPLATE:\<var name\>.TEMPLATE**,
+where \<var name\> is the name of a var.
+
+
 About Entries In 'recipe.sh'
 ----------------------------
 
@@ -111,7 +135,7 @@ data into it:
 		Used in **init** process.
 
   * **Component**: Defines a series of entries used to identify the different components
-		of a recipe, when it is a compound one. Basic information to use are:
+		of a recipe, when it is a compound one. Basic information items to use are:
 
     * Name: Name of the component recipe to use. ID option. Only required entry.
     * Version: Version of the component recipe to use. Used to further identificate
