@@ -104,7 +104,7 @@ data into it:
 		Used in **clone** process.
 
   * **Template**: Defines a series of entries used to identify template vars to be
-		used inside the .TEMPLATE files and [TEMPLATE:*] entries. This is not a recopilation of all available
+		used inside the .TEMPLATE files and [TEMPLATE:\*] entries. This is not a recopilation of all available
 		vars, but a list of default values, so when initializing the recipe, the user
 		won't have to explicitely pass values for them.
 		Receives a multiple value.
@@ -123,8 +123,8 @@ data into it:
     * ICO: Set of entries aimed to alter a given component definition. With it you
       can change Non-ID options of those components.
 
-      Receives a multiple value.
-      Used in **clone** process.
+    Receives a multiple value.
+    Used in **clone** process.
 
 
 New Operations
