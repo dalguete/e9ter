@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-#
 # Functionality for the init_recipe function
 #
 # Operation must be registerd with "set_operation"
@@ -14,15 +12,15 @@
 # Be sure to implement them.
 # 
 
-set_operation "init-recipe" "v:s:t:e:" "version:,source:,template-var-key:,template-var-value:"
+set_operation "init" "v:s:t:e:" "version:,source:,template-var-key:,template-var-value:"
 
 # Function used to display operation usage
-function init_recipe_usage() {
+function init_usage() {
   die "TODO: Init recipe usage"
 }
 
 # Function used to consume operation passed options
-function init_recipe_consume() {
+function init_consume() {
   local key_name=
 
   # Process all input data. Only valid entries will live here. Non valid ones are
@@ -68,7 +66,7 @@ function init_recipe_consume() {
 # Function used to init a cloned recipe from source, into current or specified folder
 #
 # Operation:
-#   init-recipe 
+#   init 
 #
 # Arguments:
 #  <recipe-name> [-v|--version <version>] [-s|--source <source>] [-t|--template-key <template-var-key>]* [-e|--template-value <template-var-value>]* [<destination>]
@@ -79,7 +77,7 @@ function init_recipe_consume() {
 #     will be used.
 #     Template var definitions in recipe will be replaced with data passed
 #     Destination can be defined, if not, current working directory will be used
-function init_recipe() {
+function init() {
   # Error checks performed
   if [ -z "${ARGS[*]}" ]; then
     die "Expected recipe name"
@@ -104,7 +102,7 @@ function init_recipe() {
   # Clone the recipe
   IFS=$'\n'
 
-  local recipe_entries=($(btdocker clone-recipe "${ARGS[0]}" -v "$version" -s "$src" "$destination"))
+  local recipe_entries=($(e9ter clone "${ARGS[0]}" -v "$version" -s "$src" "$destination"))
   if [ -z "${recipe_entries[*]}" ]; then
     die
   fi
@@ -143,7 +141,7 @@ function init_recipe() {
         done
       fi
 
-      # Remove the .TEMPLATE suffix=
+      # Remove the .TEMPLATE suffix
       mv "$match_item" "${match_item%.TEMPLATE}"
     done
   done
@@ -158,7 +156,7 @@ function init_recipe() {
     for inode in "${recipe_inodes[@]}"; do
       local inode_item="$(find . -inum "$inode")"
 
-      # Search all items that have as suffix ".TEMPLATE", and perform replacements
+      # Search all items that have a name like [TEMPLATE:*], and perform replacements
       local matches=($(find "$inode_item" -name "$template_var_name" -printf '%i\n'))
       for match in "${matches[@]}"; do
         local match_item="$(find . -inum "$match")"

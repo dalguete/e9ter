@@ -1,6 +1,4 @@
-#!/usr/bin/env bash
-#
-# Functionality for the clone_recipe function
+# Functionality for the clone function
 #
 # Operation must be registerd with "set_operation"
 # Internal process requires some functions to be defined, as explained next
@@ -14,15 +12,15 @@
 # Be sure to implement them.
 # 
 
-set_operation "clone-recipe" "v:s:" "version:,source:"
+set_operation "clone" "v:s:" "version:,source:"
 
 # Function used to display operation usage
-function clone_recipe_usage() {
+function clone_usage() {
   die "TODO: Clone recipe usage"
 }
 
 # Function used to consume operation passed options
-function clone_recipe_consume() {
+function clone_consume() {
   # Process all input data. Only valid entries will live here. Non valid ones are
   # filtered in the main consume process
   while [ $# -gt 0 ]
@@ -46,7 +44,7 @@ function clone_recipe_consume() {
 # Function used to clone a defined recipe from source, into current or specified folder
 #
 # Operation:
-#   clone-recipe 
+#   clone 
 #
 # Arguments:
 #  <recipe-name> [-v|--version <version>] [-s|--source <source>] [<destination>]
@@ -59,7 +57,7 @@ function clone_recipe_consume() {
 # 
 # Return:
 #   Prints the names of files and folders cloned
-function clone_recipe() {
+function clone() {
   # Error checks performed
   if [ -z "${ARGS[*]}" ]; then
     die "Expected recipe name"
@@ -109,7 +107,7 @@ function clone_recipe() {
   #
   # Idea took from http://stackoverflow.com/a/13738951
   #
-  temp=$(crossos mktemp -d)
+  local temp=$(crossos mktemp -d)
   pushd $temp &> /dev/null
   git init -q
   git remote add -f origin "$src" &> /dev/null
@@ -151,7 +149,7 @@ function clone_recipe() {
 
       # Performs a clone in the component found
       local c_temp=$(crossos mktemp -d)
-      btdocker clone-recipe "${!c_recipe}" -v "${!c_version}" -s "${!c_src}" "$c_temp" > /dev/null
+      e9ter clone "${!c_recipe}" -v "${!c_version}" -s "${!c_src}" "$c_temp" > /dev/null
 
       # In case the destination folder is empty, we can say there was an error
       if [ -z "$(ls -A $c_temp)" ]; then
@@ -165,7 +163,7 @@ function clone_recipe() {
       # those are files or folders with a name in the format:
       #
       #   [COMPONENT:<recipe name>[_<version name>][-<position>]]
-      #     wrapping square brackets [] are part of the name
+      #     global wrapping square brackets [] are part of the name
       #
       # Where:
       #   <recipe name> is the name of the component recipe
@@ -208,15 +206,15 @@ function clone_recipe() {
       
       # Component recipe patterns to look for
       local patterns=(
-        "${!c_recipe}_${!c_version}-${i}"
-        "${!c_recipe}-${i}_${!c_version}"
+        "${!c_recipe}_${!c_version}-${c_position}"
+        "${!c_recipe}-${c_position}_${!c_version}"
         "${!c_recipe}_${!c_version}"
       )
 
       # In case $version and $version_last are the same, proceed to search for
       # the generic component pivot forms too
       if [ "$version" = "$version_last" ]; then
-        patterns[${#patterns[@]}]="${!c_recipe}-${i}"
+        patterns[${#patterns[@]}]="${!c_recipe}-${c_position}"
         patterns[${#patterns[@]}]="${!c_recipe}"
       fi
 
