@@ -36,11 +36,11 @@ recipe itself, inside with folders named after the version it holds, and finally
 internally the 'recipe.sh' file with all recipe variables, as required.
 
 By default, you'll use a recipe folder, living next to recipe.sh, where all your
-recipe definitions will live. You can use a different folder by setting the RECIPE__FOLDER
+recipe definitions will live. You can use a different folder by setting the **Folder**
 var inside recipe.sh.
 
 Despite the fact recipe folder can have anything you want, disposed in any way, we
-recommend you create inside of it another folder, named after your recipe's name,
+recommend you create inside of it, other folder, named after your recipe's name,
 and inside of it all the final recipe structure. The idea is to have just one entry
 for the recipe, to better support cases when multiple sub-recipes will be used. 
 Because you have a lot of flexibility in defining recipes that eventually could
@@ -51,7 +51,7 @@ web server recipe under the same dir.
 
 In general, the recipe structure should be something like:
 
-```
+<pre>
 <recipe name>
  │
  ├── version
@@ -64,7 +64,7 @@ In general, the recipe structure should be something like:
  ├── <version folder Y>/
  ├── <version folder Z>/
  └── ...
-```
+</pre>
 
 Having the entries as follows:
 
