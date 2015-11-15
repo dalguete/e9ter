@@ -51,7 +51,7 @@ web server recipe under the same dir.
 
 In general, the recipe structure should be something like:
 
-<pre>
+```
 <recipe name>
  │
  ├── version
@@ -64,28 +64,28 @@ In general, the recipe structure should be something like:
  ├── <version folder Y>/
  ├── <version folder Z>/
  └── ...
-</pre>
+```
 
 Having the entries as follows:
 
-	* **\<recipe name\>**: Name of the recipe.
+  * **\<recipe name\>**: Name of the recipe.
 
-	* **version**: Text file which contains the name of the recipe's default version.
+  * **version**: Text file which contains the name of the recipe's default version.
     As a recipe can have several version, with this file the default one can be located.
     Just one line is required, as only the firtst line will be evaluated. Required.
 
-	* **\<version folder\>**: Folder named after the version holded here. At least
+  * **\<version folder\>**: Folder named after the version holded here. At least
     one of them should exist, that must match the value given in **version** file.
 
-	* **recipe.sh**: Recipe configuration file, that holds basic information about
+  * **recipe.sh**: Recipe configuration file, that holds basic information about
     the recipe, like location, replacement variables, inner recipes or components,
     etc.
 
-	* **recipe/**: Folder where the actual recipe contents will live. If not overriden
+  * **recipe/**: Folder where the actual recipe contents will live. If not overriden
     in recipe.sh file, this is the default place e9ter will look for. If other name
     defined in recipe.sh, that folder will be used as place to be checked.
 
-	* **\<actual recipe contents\>**: As the name implies, these are the real recipe
+  * **\<actual recipe contents\>**: As the name implies, these are the real recipe
     contents. This can be anything you want, but the recommendation is to make this
     a folder named after the recipe, and inside of it the recipe contents. This just
     a helper for possible compound recipes that could be using this one.
