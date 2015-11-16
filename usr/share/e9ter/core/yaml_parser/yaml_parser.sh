@@ -26,7 +26,7 @@ function yaml_parser {
   # Performs the YAML parsing
   echo "$input" | sed -n -e "s,^\($s\)\($w\)$s[:-]$s\"\(.*\)\"$s\$,\1$fs\2$fs\3,p" \
   -e "s,^\($s\)\($w\)$s[:-]$s\(.*\)$s\$,\1$fs\2$fs\3,p" \
-  | awk -F"$fs" -v prefix="$prefix" '{
+  | crossos awk -F"$fs" -v prefix="$prefix" '{
     indent = length($1)/2;
     key = $2;
     value = $3;

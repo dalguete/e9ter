@@ -16,6 +16,7 @@ Requirements
 	* Bash >=4 OS X - Follow this guide http://johndjameson.com/blog/updating-your-shell-with-homebrew/ to enable it.
 	* Coreutils >=8 OS X - `brew install coreutils` to enable it.
 	* getopt >=1.1.6 OS X - `brew install gnu-getopt` to enable it.
+	* Gawk >=4.1 OS X - `brew install gawk` to enable it.
 
 * Linux Users, enjoy!.
 
