@@ -123,24 +123,26 @@ function clone() {
     die "Recipe '$recipe' (with version '$version') not found"
   fi
 
-  # Reset all recipe vars set, just to be sure a parent cloning processes won't affect us.
-  unset ${!RECIPE__@}
+  # Load the recipe info from yaml file to proceed.
+  # First, reset all recipe vars set, just to be sure a parent cloning processes
+  # won't affect us.
+  unset ${!RECIPE_@}
 
-  # Load the recipe.sh file to know how to proceed
-  . "$temp/$recipe/$version/recipe.sh"
+  # Effectively load the vars from recipe.yml
+  eval $(yaml_parser "`cat "$temp/$recipe/$version/recipe.yaml"`" "recipe")
 
   # Locate where the recipe actually lives
-  local folder=${RECIPE__FOLDER:-"recipe"}
+  local folder=${RECIPE_FOLDER:-"recipe"}
 
   # Check if there are components to process to keep cloning.
-  if [ "$(echo "${!RECIPE__COMPONENT_@}")" ]; then
+  if [ "$(echo "${!RECIPE_COMPONENT_@}")" ]; then
     # Loop through all component vars
     for (( i=0; ; i++ ))
     do
-      local c_recipe="RECIPE__COMPONENT_${i}_NAME"
-      local c_version="RECIPE__COMPONENT_${i}_VERSION"
+      local c_recipe="RECIPE_COMPONENT_${i}_NAME"
+      local c_version="RECIPE_COMPONENT_${i}_VERSION"
       local c_position=$i
-      local c_src="RECIPE__COMPONENT_${i}_SOURCE"
+      local c_src="RECIPE_COMPONENT_${i}_SOURCE"
       
       # Empty recipe or not defined, break
       if [ -z "${!c_recipe}" ]; then
